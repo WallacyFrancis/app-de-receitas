@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const history = useHistory();
 
   // Funcao retirada de : * Link: https://www.horadecodar.com.br/2020/09/13/como-validar-email-com-javascript/
   const validateEmail = (text) => {
@@ -14,19 +16,27 @@ function Login() {
   const validatePassword = (pass) => {
     const LIMIT_CHARACTER = 6;
     return pass.length > LIMIT_CHARACTER;
-    // console.log(pass.length > LIMIT_CHARACTER);
   };
 
   useEffect(() => {
     const validation = validateEmail(email) && validatePassword(password);
     if (validation) setDisabled(false);
     else setDisabled(true);
-    console.log('ok');
   }, [email, password]);
 
   const handleChange = ({ target: { name, value } }) => (
     name === 'email' ? setEmail(value) : setPassword(value)
   );
+
+  const handleClick = () => {
+    const user = {
+      email,
+    };
+    localStorage.setItem('mealsToken', 1);
+    localStorage.setItem('cocktailsToken', 1);
+    localStorage.setItem('user', JSON.stringify(user));
+    history.push('/comidas');
+  };
 
   return (
     <main>
@@ -56,6 +66,7 @@ function Login() {
         type="button"
         data-testid="login-submit-btn"
         disabled={ disabled }
+        onClick={ handleClick }
       >
         Entrar
       </button>
