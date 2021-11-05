@@ -8,14 +8,13 @@ function Login() {
   // Funcao retirada de : * Link: https://www.horadecodar.com.br/2020/09/13/como-validar-email-com-javascript/
   const validateEmail = (text) => {
     const re = /\S+@\S+\.\S+/;
-    // return re.test(text);
-    console.log(re.text(text));
+    return re.test(text);
   };
 
   const validatePassword = (pass) => {
     const LIMIT_CHARACTER = 6;
-    // return pass.length > LIMIT_CHARACTER && setPassword(pass);
-    console.log(pass.length > LIMIT_CHARACTER && setPassword(pass));
+    return pass.length > LIMIT_CHARACTER;
+    // console.log(pass.length > LIMIT_CHARACTER);
   };
 
   useEffect(() => {
