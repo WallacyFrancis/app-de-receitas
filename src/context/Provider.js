@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Context from './Context';
 
@@ -14,8 +13,7 @@ import {
 
 function Provider({ children }) {
   const [recipes, setRecipes] = useState([]);
-  const [redirect, setRedirect] useState
-  const history = useHistory();
+  const [redirect, setRedirect] = useState(false);
 
   function showAlert(recipesResult) {
     if (recipesResult === null) {
@@ -46,12 +44,7 @@ function Provider({ children }) {
       showAlert(recipesResult);
     }
     if (recipesResult !== null && recipesResult.length === 1) {
-      const id = recipesResult[0].idMeal;
-      // history.push(`/comidas/${id}`);
-      return (<Redirect to={ `/comidas/${id}` } />);
-      // console.log(recipesResult);
-      // console.log(id);
-      // Arrabiata
+      setRedirect(true);
     }
   }
 
@@ -76,8 +69,7 @@ function Provider({ children }) {
       showAlert(recipesResult);
     }
     if (recipesResult !== null && recipesResult.length === 1) {
-      const { idDrink } = recipesResult;
-      history.push(`/bebidas/${idDrink}`);
+      setRedirect(true);
     }
   }
 
@@ -93,6 +85,7 @@ function Provider({ children }) {
 
   const contextValue = {
     recipes,
+    redirect,
     searchRecipes,
   };
 
