@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import Context from '../../context/Context';
-import { fetchCategoriesDrinks } from '../../services/fetchAPI';
+import { fetchCategoriesDrinks, fetchRecipes } from '../../services/fetchAPI';
 
 function ReceitasBebidas() {
   const history = useHistory();
@@ -31,6 +31,13 @@ function ReceitasBebidas() {
     return <h4>Loading...</h4>;
   }
 
+  async function handleClick({ target: { value } }) {
+    const URL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${value}`;
+    const drinksRecipes = await fetchRecipes(URL);
+    setDrinks(drinksRecipes.drinks);
+  }
+  console.log(drinks);
+
   function renderFilters() {
     const FIVE_NUMBER = 5;
     const fiveCategories = (categories.slice(0, FIVE_NUMBER));
@@ -41,6 +48,8 @@ function ReceitasBebidas() {
             type="button"
             key={ index }
             data-testid={ `${category.strCategory}-category-filter` }
+            value={ category.strCategory }
+            onClick={ handleClick }
           >
             { category.strCategory }
           </button>
@@ -52,7 +61,7 @@ function ReceitasBebidas() {
   return (
     <>
       <Header title="Bebidas" />
-      { renderFilters() }
+      { categories !== undefined ? renderFilters() : '' }
       { redirect ? history.push(`/bebidas/${getIdDrink}`) : (
         <div>
           {

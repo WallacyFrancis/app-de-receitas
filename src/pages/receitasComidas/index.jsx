@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import Context from '../../context/Context';
-import { fetchCategoriesMeals } from '../../services/fetchAPI';
+import { fetchCategoriesMeals, fetchRecipes } from '../../services/fetchAPI';
 
 function ReceitasComidas() {
   const history = useHistory();
@@ -31,6 +31,13 @@ function ReceitasComidas() {
     return <h4>Loading...</h4>;
   }
 
+  async function handleClick({ target: { value } }) {
+    const URL = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${value}`;
+    const mealsRecipe = await fetchRecipes(URL);
+    setMeals(mealsRecipe.meals);
+  }
+  console.log(meals);
+
   function renderFilters() {
     const FIVE_NUMBER = 5;
     const fiveCategories = (categories.slice(0, FIVE_NUMBER));
@@ -41,6 +48,8 @@ function ReceitasComidas() {
             type="button"
             data-testid={ `${category.strCategory}-category-filter` }
             key={ index }
+            value={ category.strCategory }
+            onClick={ handleClick }
           >
             { category.strCategory }
           </button>
@@ -52,7 +61,7 @@ function ReceitasComidas() {
   return (
     <>
       <Header title="Comidas" />
-      { renderFilters() }
+      { categories !== undefined ? renderFilters() : '' }
       { redirect ? history.push(`/comidas/${getIdMeal}`) : (
         <div>
           {

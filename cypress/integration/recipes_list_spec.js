@@ -129,7 +129,7 @@ describe('27 - Implemente os botões de categoria para serem utilizados como fil
   });
 });
 
-describe.only('28 - Implemente o filtro das receitas através da API ao clicar no filtro de categoria', () => {
+describe('28 - Implemente o filtro das receitas através da API ao clicar no filtro de categoria', () => {
   it('Caso as receitas sejam de comida e a categoria seja "Beef", deve-se carregar as 12 primeiras receitas de "Beef"', () => {
     cy.visit('http://localhost:3000/comidas', {
       onBeforeLoad(win) {
@@ -279,7 +279,7 @@ describe('29 - Implemente o filtro como um toggle, que se for selecionado de nov
   });
 });
 
-describe('30 - Implemente o filtro de categoria para que apenas um seja selecionado por vez', () => {
+describe.only('30 - Implemente o filtro de categoria para que apenas um seja selecionado por vez', () => {
   it('Caso as receitas sejam de comida apenas um filtro de categoria deve poder ser selecionado por vez', () => {
     cy.visit('http://localhost:3000/comidas', {
       onBeforeLoad(win) {
