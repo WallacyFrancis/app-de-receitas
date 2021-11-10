@@ -14,6 +14,12 @@ export async function fetchMealsName(name) {
 export async function fetchMealsFirstLetter(firstLetter) {
   const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${firstLetter}`);
   const data = await response.json();
+  return data;
+}
+
+export async function fetchCategoriesMeals() {
+  const response = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
+  const data = await response.json();
   return data.meals;
 }
 
@@ -32,6 +38,12 @@ export async function fetchDrinksName(name) {
 
 export async function fetchDrinksFirstLetter(firstLetter) {
   const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${firstLetter}`);
+  const data = await response.json();
+  return data.drinks;
+}
+
+export async function fetchCategoriesDrinks() {
+  const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
   const data = await response.json();
   return data.drinks;
 }
