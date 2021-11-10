@@ -9,6 +9,7 @@ function ReceitasBebidas() {
   const history = useHistory();
   const [drinks, setDrinks] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [btnName, setBtnName] = useState('');
   const { redirect } = useContext(Context);
   const getIdDrink = drinks.map((drink) => (drink.idDrink));
   const DOZE_PRIMEIRAS_BEBIDAS = 12;
@@ -32,11 +33,17 @@ function ReceitasBebidas() {
   }
 
   async function handleClick({ target: { value } }) {
-    const URL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${value}`;
-    const drinksRecipes = await fetchRecipes(URL);
-    setDrinks(drinksRecipes.drinks);
+    if (btnName === value) {
+      fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')
+        .then((result) => result.json())
+        .then((result) => setDrinks(result.drinks));
+    } else {
+      setBtnName(value);
+      const URL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${value}`;
+      const drinksRecipes = await fetchRecipes(URL);
+      setDrinks(drinksRecipes.drinks);
+    }
   }
-  console.log(drinks);
 
   function renderFilters() {
     const FIVE_NUMBER = 5;

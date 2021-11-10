@@ -8,6 +8,7 @@ import { fetchCategoriesMeals, fetchRecipes } from '../../services/fetchAPI';
 function ReceitasComidas() {
   const history = useHistory();
   const { redirect } = useContext(Context);
+  const [btnName, setBtnName] = useState('');
   const [meals, setMeals] = useState([]);
   const [categories, setCategories] = useState([]);
   const getIdMeal = meals.map((meal) => meal.idMeal);
@@ -32,11 +33,17 @@ function ReceitasComidas() {
   }
 
   async function handleClick({ target: { value } }) {
-    const URL = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${value}`;
-    const mealsRecipe = await fetchRecipes(URL);
-    setMeals(mealsRecipe.meals);
+    if (btnName === value) {
+      fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')
+        .then((response) => response.json())
+        .then((response) => setMeals(response.meals));
+    } else {
+      setBtnName(value);
+      const URL = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${value}`;
+      const mealsRecipe = await fetchRecipes(URL);
+      setMeals(mealsRecipe.meals);
+    }
   }
-  console.log(meals);
 
   function renderFilters() {
     const FIVE_NUMBER = 5;
