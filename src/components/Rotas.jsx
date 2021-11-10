@@ -23,8 +23,8 @@ function Rotas() {
       <Route exact path="/" component={ Login } />
       <Route exact path="/comidas" component={ ReceitasComidas } />
       <Route exact path="/bebidas" component={ ReceitasBebidas } />
-      <Route exact path="/comidas/{id-da-receita}" component={ DetalhesComidas } />
-      <Route exact path="/bebidas/{id-da-receita}" component={ DetalhesBebidas } />
+      <Route exact path="/comidas/:id" component={ DetalhesComidas } />
+      <Route exact path="/bebidas/:id" component={ DetalhesBebidas } />
       <Route
         exact
         path="/comidas/{id-da-receita}/in-progress"

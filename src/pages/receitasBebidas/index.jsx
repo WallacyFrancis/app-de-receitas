@@ -73,7 +73,12 @@ function ReceitasBebidas() {
         <div>
           {
             drinks.map((drink, index) => (
-              <div key={ index } data-testid={ `${index}-recipe-card` }>
+              <button
+                type="button"
+                key={ index }
+                data-testid={ `${index}-recipe-card` }
+                onClick={ () => history.push(`/bebidas/${drink.idDrink}`) }
+              >
                 <img
                   src={ drink.strDrinkThumb }
                   data-testid={ `${index}-card-img` }
@@ -81,7 +86,7 @@ function ReceitasBebidas() {
                   width="200px"
                 />
                 <span data-testid={ `${index}-card-name` }>{ drink.strDrink }</span>
-              </div>
+              </button>
             )).slice(0, DOZE_PRIMEIRAS_BEBIDAS)
           }
         </div>

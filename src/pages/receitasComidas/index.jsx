@@ -73,7 +73,12 @@ function ReceitasComidas() {
         <div>
           {
             meals.map((meal, index) => (
-              <div key={ index } data-testid={ `${index}-recipe-card` }>
+              <button
+                type="button"
+                key={ index }
+                data-testid={ `${index}-recipe-card` }
+                onClick={ () => history.push(`/comidas/${meal.idMeal}`) }
+              >
                 <img
                   src={ meal.strMealThumb }
                   data-testid={ `${index}-card-img` }
@@ -81,7 +86,7 @@ function ReceitasComidas() {
                   width="200px"
                 />
                 <span data-testid={ `${index}-card-name` }>{ meal.strMeal }</span>
-              </div>
+              </button>
             )).slice(0, DOZE_PRIMEIRAS_COMIDAS)
           }
         </div>
