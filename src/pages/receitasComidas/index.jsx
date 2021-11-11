@@ -7,7 +7,7 @@ import { fetchCategoriesMeals, fetchRecipes } from '../../services/fetchAPI';
 
 function ReceitasComidas() {
   const history = useHistory();
-  const { redirect, recipes, setRecipes } = useContext(Context);
+  const { redirect, recipes, setRecipes, setIdRecipe } = useContext(Context);
   const [btnName, setBtnName] = useState('');
   const [meals, setMeals] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -32,7 +32,7 @@ function ReceitasComidas() {
     return <h4>Loading...</h4>;
   }
 
-  async function handleClick({ target: { value } }) {
+  async function handleClickCategory({ target: { value } }) {
     setRecipes([]);
     if (btnName === value || value === 'all') {
       fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')
@@ -57,7 +57,7 @@ function ReceitasComidas() {
             key={ index }
             data-testid={ `${category.strCategory}-category-filter` }
             value={ category.strCategory }
-            onClick={ handleClick }
+            onClick={ handleClickCategory }
           >
             { category.strCategory }
           </button>
@@ -74,7 +74,10 @@ function ReceitasComidas() {
             type="button"
             key={ index }
             data-testid={ `${index}-recipe-card` }
-            onClick={ () => history.push(`/comidas/${meal.idMeal}`) }
+            onClick={ () => {
+              history.push(`/comidas/${meal.idMeal}`);
+              setIdRecipe(meal.idMeal);
+            } }
           >
             <img
               src={ meal.strMealThumb }
@@ -96,7 +99,7 @@ function ReceitasComidas() {
       <button
         type="button"
         data-testid="All-category-filter"
-        onClick={ handleClick }
+        onClick={ handleClickCategory }
         value="all"
       >
         All
@@ -110,7 +113,10 @@ function ReceitasComidas() {
                 type="button"
                 key={ index }
                 data-testid={ `${index}-recipe-card` }
-                onClick={ () => history.push(`/comidas/${meal.idMeal}`) }
+                onClick={ () => {
+                  history.push(`/comidas/${meal.idMeal}`);
+                  setIdRecipe(meal.idMeal);
+                } }
               >
                 <img
                   src={ meal.strMealThumb }

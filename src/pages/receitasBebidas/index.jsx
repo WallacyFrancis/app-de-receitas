@@ -10,7 +10,7 @@ function ReceitasBebidas() {
   const [drinks, setDrinks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [btnName, setBtnName] = useState('');
-  const { redirect, recipes, setRecipes } = useContext(Context);
+  const { redirect, recipes, setRecipes, setIdRecipe } = useContext(Context);
   const getIdDrink = recipes.map((drink) => (drink.idDrink));
   const DOZE_PRIMEIRAS_BEBIDAS = 12;
 
@@ -74,7 +74,10 @@ function ReceitasBebidas() {
             type="button"
             key={ index }
             data-testid={ `${index}-recipe-card` }
-            onClick={ () => history.push(`/bebidas/${drink.idDrink}`) }
+            onClick={ () => {
+              history.push(`/bebidas/${drink.idDrink}`);
+              setIdRecipe(drink.idDrink);
+            } }
           >
             <img
               src={ drink.strDrinkThumb }
@@ -109,7 +112,10 @@ function ReceitasBebidas() {
                 type="button"
                 key={ index }
                 data-testid={ `${index}-recipe-card` }
-                onClick={ () => history.push(`/bebidas/${drink.idDrink}`) }
+                onClick={ () => {
+                  history.push(`/bebidas/${drink.idDrink}`);
+                  setIdRecipe(drink.idDrink);
+                } }
               >
                 <img
                   src={ drink.strDrinkThumb }
