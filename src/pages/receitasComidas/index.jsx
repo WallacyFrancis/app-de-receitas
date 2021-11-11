@@ -7,11 +7,11 @@ import { fetchCategoriesMeals, fetchRecipes } from '../../services/fetchAPI';
 
 function ReceitasComidas() {
   const history = useHistory();
-  const { redirect } = useContext(Context);
+  const { redirect, recipes, setRecipes } = useContext(Context);
   const [btnName, setBtnName] = useState('');
   const [meals, setMeals] = useState([]);
   const [categories, setCategories] = useState([]);
-  const getIdMeal = meals.map((meal) => meal.idMeal);
+  const getIdMeal = recipes.map((meal) => meal.idMeal);
   const DOZE_PRIMEIRAS_COMIDAS = 12;
 
   useEffect(() => {
@@ -33,7 +33,8 @@ function ReceitasComidas() {
   }
 
   async function handleClick({ target: { value } }) {
-    if (btnName === value) {
+    setRecipes([]);
+    if (btnName === value || value === 'all') {
       fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')
         .then((response) => response.json())
         .then((response) => setMeals(response.meals));
@@ -53,8 +54,8 @@ function ReceitasComidas() {
         (
           <button
             type="button"
-            data-testid={ `${category.strCategory}-category-filter` }
             key={ index }
+            data-testid={ `${category.strCategory}-category-filter` }
             value={ category.strCategory }
             onClick={ handleClick }
           >
@@ -65,14 +66,46 @@ function ReceitasComidas() {
     );
   }
 
+  function renderMeals() {
+    if (recipes.length === 0) {
+      return (
+        meals.map((meal, index) => (
+          <button
+            type="button"
+            key={ index }
+            data-testid={ `${index}-recipe-card` }
+            onClick={ () => history.push(`/comidas/${meal.idMeal}`) }
+          >
+            <img
+              src={ meal.strMealThumb }
+              data-testid={ `${index}-card-img` }
+              alt={ meal.strMeal }
+              width="200px"
+            />
+            <span data-testid={ `${index}-card-name` }>{ meal.strMeal }</span>
+          </button>
+        )).slice(0, DOZE_PRIMEIRAS_COMIDAS)
+      );
+    }
+  }
+  console.log(recipes);
+  console.log(meals);
   return (
     <>
       <Header title="Comidas" />
+      <button
+        type="button"
+        data-testid="All-category-filter"
+        onClick={ handleClick }
+        value="all"
+      >
+        All
+      </button>
       { categories !== undefined ? renderFilters() : '' }
       { redirect ? history.push(`/comidas/${getIdMeal}`) : (
         <div>
           {
-            meals.map((meal, index) => (
+            recipes.map((meal, index) => (
               <button
                 type="button"
                 key={ index }
@@ -91,6 +124,7 @@ function ReceitasComidas() {
           }
         </div>
       ) }
+      { renderMeals() }
       <Footer />
     </>
   );

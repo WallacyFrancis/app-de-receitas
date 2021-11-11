@@ -27,12 +27,10 @@ function Provider({ children }) {
     let recipesResult = [];
     if (radioFilter === 'ingredient') {
       recipesResult = await fetchMealsIngredient(searchInputText);
-      console.log(recipesResult);
       showAlert(recipesResult);
     }
     if (radioFilter === 'name') {
       recipesResult = await fetchMealsName(searchInputText);
-      console.log(recipesResult);
       showAlert(recipesResult);
     }
     if (radioFilter === 'firstLetter') {
@@ -40,7 +38,6 @@ function Provider({ children }) {
         return global.alert('Sua busca deve conter somente 1 (um) caracter');
       }
       recipesResult = await fetchMealsFirstLetter(searchInputText);
-      console.log(recipesResult);
       showAlert(recipesResult);
     }
     if (recipesResult !== null && recipesResult.length === 1) {
@@ -87,6 +84,7 @@ function Provider({ children }) {
     recipes,
     redirect,
     searchRecipes,
+    setRecipes,
   };
 
   return (
