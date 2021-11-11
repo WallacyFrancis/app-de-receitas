@@ -10,8 +10,8 @@ function ReceitasBebidas() {
   const [drinks, setDrinks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [btnName, setBtnName] = useState('');
-  const { redirect } = useContext(Context);
-  const getIdDrink = drinks.map((drink) => (drink.idDrink));
+  const { redirect, recipes, setRecipes, setIdRecipe } = useContext(Context);
+  const getIdDrink = recipes.map((drink) => (drink.idDrink));
   const DOZE_PRIMEIRAS_BEBIDAS = 12;
 
   useEffect(() => {
@@ -33,7 +33,8 @@ function ReceitasBebidas() {
   }
 
   async function handleClick({ target: { value } }) {
-    if (btnName === value) {
+    setRecipes([]);
+    if (btnName === value || value === 'all') {
       fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')
         .then((result) => result.json())
         .then((result) => setDrinks(result.drinks));
@@ -65,19 +66,56 @@ function ReceitasBebidas() {
     );
   }
 
+  function renderDrinks() {
+    if (recipes.length === 0) {
+      return (
+        drinks.map((drink, index) => (
+          <button
+            type="button"
+            key={ index }
+            data-testid={ `${index}-recipe-card` }
+            onClick={ () => {
+              history.push(`/bebidas/${drink.idDrink}`);
+              setIdRecipe(drink.idDrink);
+            } }
+          >
+            <img
+              src={ drink.strDrinkThumb }
+              data-testid={ `${index}-card-img` }
+              alt={ drink.strDrink }
+              width="200px"
+            />
+            <span data-testid={ `${index}-card-name` }>{ drink.strDrink }</span>
+          </button>
+        )).slice(0, DOZE_PRIMEIRAS_BEBIDAS)
+      );
+    }
+  }
+
   return (
     <>
       <Header title="Bebidas" />
+      <button
+        type="button"
+        data-testid="All-category-filter"
+        onClick={ handleClick }
+        value="all"
+      >
+        All
+      </button>
       { categories !== undefined ? renderFilters() : '' }
       { redirect ? history.push(`/bebidas/${getIdDrink}`) : (
         <div>
           {
-            drinks.map((drink, index) => (
+            recipes.map((drink, index) => (
               <button
                 type="button"
                 key={ index }
                 data-testid={ `${index}-recipe-card` }
-                onClick={ () => history.push(`/bebidas/${drink.idDrink}`) }
+                onClick={ () => {
+                  history.push(`/bebidas/${drink.idDrink}`);
+                  setIdRecipe(drink.idDrink);
+                } }
               >
                 <img
                   src={ drink.strDrinkThumb }
@@ -91,6 +129,7 @@ function ReceitasBebidas() {
           }
         </div>
       ) }
+      { renderDrinks() }
       <Footer />
     </>
   );
