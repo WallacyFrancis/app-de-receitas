@@ -1,8 +1,9 @@
 import React from 'react';
 
 // useEffect(() => {
-//   fetch('https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i={id-da-receita}');
-//   .then(() => )
+//   fetch('https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i={id-da-receita}')
+//   .then((result) => result.json())
+//   .then()
 // });
 
 function DetalhesBebidas() {
