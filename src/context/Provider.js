@@ -83,8 +83,8 @@ function Provider({ children }) {
 
   const contextValue = {
     recipes,
-    redirect,
     idRecipe,
+    redirect,
     searchRecipes,
     setRecipes,
     setIdRecipe,

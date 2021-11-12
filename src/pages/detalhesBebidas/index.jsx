@@ -1,17 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Context from '../../context/Context';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 
 function DetalhesBebidas() {
-  const { idRecipe } = useContext(Context);
   const [drink, setDrink] = useState([]);
+  const [mealsRecomendations, setMealsRecomendations] = useState([]);
+  const id = useHistory().location.pathname.split('/')[2];
 
-  useEffect(() => {
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idRecipe}`)
-      .then((result) => result.json())
-      .then((result) => setDrink(result.drinks[0]));
-  }, [idRecipe]);
+  console.log(mealsRecomendations);
 
-  console.log(drink.strDrinkThumb);
+  useEffect(() => { // requisição drinks pelo id
+    async function getDrinksById() {
+      const { drinks } = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
+        .then((response) => response.json());
+      setDrink(drinks[0]);
+      console.log(drinks);
+    }
+    getDrinksById();
+  }, [id]);
+
+  useEffect(() => { // requisição de recomendações de comidas
+    async function getMealsRecomendation() {
+      const { meals } = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')
+        .then((response) => response.json());
+      setMealsRecomendations(meals);
+    }
+    getMealsRecomendation();
+  }, []);
+
   return (
     <div>
       <img
