@@ -14,6 +14,7 @@ import {
 function Provider({ children }) {
   const [recipes, setRecipes] = useState([]);
   const [redirect, setRedirect] = useState(false);
+  const [idRecipe, setIdRecipe] = useState('');
 
   function showAlert(recipesResult) {
     if (recipesResult === null) {
@@ -82,9 +83,11 @@ function Provider({ children }) {
 
   const contextValue = {
     recipes,
+    idRecipe,
     redirect,
     searchRecipes,
     setRecipes,
+    setIdRecipe,
   };
 
   return (
