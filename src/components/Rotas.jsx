@@ -27,12 +27,12 @@ function Rotas() {
       <Route exact path="/bebidas/:id" component={ DetalhesBebidas } />
       <Route
         exact
-        path="/comidas/{id-da-receita}/in-progress"
+        path="/comidas/:id/in-progress"
         component={ ProcessoComidas }
       />
       <Route
         exact
-        path="/bebidas/{id-da-receita}/in-progress"
+        path="/bebidas/:id/in-progress"
         component={ ProcessoBebidas }
       />
       <Route exact path="/explorar" component={ Explorar } />
