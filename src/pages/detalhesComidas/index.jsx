@@ -1,31 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import PropTypes from 'prop-types';
+import RecomendationDrinksCard from '../../components/RecomendationDrinksCard';
 
-function DetalhesComidas() {
+function DetalhesComidas({ history }) {
   const [meal, setMeal] = useState([]);
-  const [drinksRecomendations, setDrinksRecomendations] = useState([]);
   const id = useHistory().location.pathname.split('/')[2];
-
-  console.log(drinksRecomendations);
 
   useEffect(() => { // requisição meals pelo id
     async function getMealsById() {
       const { meals } = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
         .then((response) => response.json());
       setMeal(meals[0]);
-      console.log(meals);
     }
     getMealsById();
   }, [id]);
-
-  useEffect(() => { // requisição de recomendações de bebidas
-    async function getDrinksRecomendation() {
-      const { drinks } = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')
-        .then((response) => response.json());
-      setDrinksRecomendations(drinks);
-    }
-    getDrinksRecomendation();
-  }, []);
 
   return (
     <div>
@@ -46,17 +35,31 @@ function DetalhesComidas() {
         </ul>
       </span>
       <span data-testid="instructions">{ meal.strInstructions }</span>
-      <video data-testid="video" src={ meal.srtYoutube }>
-        <track default kind="captions" src="" />
+      <video data-testid="video" src={ meal.srtYoutube } controls width="400">
+        <track kind="captions" />
+        Seu navegador não suporta o elemento
       </video>
-      <span data-testid="0-recomendation-card">
+      <br />
+      <p>
         Receitas Recomendadas
-      </span>
-      <button type="button" data-testid="start-recipe-btn">
+        <RecomendationDrinksCard />
+      </p>
+      <button
+        className="button-start"
+        type="button"
+        data-testid="start-recipe-btn"
+        onClick={ () => history.push(`/comidas/${id}/in-progress`) }
+      >
         Iniciar Receita
       </button>
     </div>
   );
 }
+
+DetalhesComidas.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 export default DetalhesComidas;
