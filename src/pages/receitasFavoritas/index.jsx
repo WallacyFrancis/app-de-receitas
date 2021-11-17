@@ -58,9 +58,7 @@ function ReceitasFavoritas() {
       console.log(recipes);
     }
     if (btnFilter === 'food') {
-      const recipesFood = favorite.filter((recipe) => {
-        return recipe.type === 'meal';
-      });
+      const recipesFood = favorite.filter((recipe) => recipe.type === 'meal');
       setRecipes(recipesFood);
     }
   }

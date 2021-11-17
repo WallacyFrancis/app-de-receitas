@@ -7,7 +7,7 @@ function ReceitasFeitas() {
   const [filterDoneRecipes, setFilterDoneRecipes] = useState('');
 
   localStorage.setItem('doneRecipes', JSON.stringify([]));
-  
+
   function getDoneRecipesByLocalStorage() {
     return JSON.parse(localStorage.getItem('doneRecipes'));
   }
