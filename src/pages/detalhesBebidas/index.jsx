@@ -5,18 +5,21 @@ import RecomendationMealsCard from '../../components/RecomendationMealCard';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 import shareIcon from '../../images/shareIcon.svg';
+import saveLocalStorage from '../../services/localStorageServices';
+
+const copy = require('clipboard-copy');
 
 function DetalhesBebidas({ history }) {
   const [drink, setDrink] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const id = useHistory().location.pathname.split('/')[2];
+  const [message, setMessage] = useState('');
 
   useEffect(() => { // requisição drinks pelo id
     async function getDrinksById() {
       const { drinks } = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
         .then((response) => response.json());
       setDrink(drinks[0]);
-      console.log(drinks[0]);
     }
     getDrinksById();
   }, [id]);
@@ -41,13 +44,6 @@ function DetalhesBebidas({ history }) {
 
   const ingredients = getIngredientsAndMeasures();
 
-  function saveLocalStorage(object) {
-    console.log(object);
-    // const arrFavorite = [...JSON.parse(localStorage.getItem('favoriteRecipes')), object];
-    // console.log(arrFavorite);
-    // localStorage.setItem('favoriteRecipes', JSON.stringify(object));
-  }
-
   function favoriteClick() {
     if (isFavorite) {
       setIsFavorite(false);
@@ -64,7 +60,12 @@ function DetalhesBebidas({ history }) {
       };
       saveLocalStorage(objDrink);
     }
-  } // strArea
+  }
+
+  function handleShare() {
+    setMessage('Link copiado!');
+    return copy(`http://localhost:3000/bebidas/${id}`);
+  }
 
   return (
     <div>
@@ -75,9 +76,10 @@ function DetalhesBebidas({ history }) {
         width="200px"
       />
       <h3 data-testid="recipe-title">{ drink.strDrink }</h3>
-      <button type="button" data-testid="share-btn">
+      <button type="button" data-testid="share-btn" onClick={ handleShare }>
         <img src={ shareIcon } alt="share" />
       </button>
+      { message }
       <button
         type="button"
         data-testid="favorite-btn"
