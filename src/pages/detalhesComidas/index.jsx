@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import RecomendationDrinksCard from '../../components/RecomendationDrinksCard';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import shareIcon from '../../images/shareIcon.svg';
 
 function DetalhesComidas({ history }) {
   const [meal, setMeal] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
   const id = useHistory().location.pathname.split('/')[2];
 
   useEffect(() => { // requisição meals pelo id
@@ -16,6 +20,34 @@ function DetalhesComidas({ history }) {
     getMealsById();
   }, [id]);
 
+  function getIngredientsAndMeasures() {
+    let ingredients = [];
+    const NUMBER_OF_INGREDIENTS = 20;
+    for (let index = 1; index <= NUMBER_OF_INGREDIENTS; index += 1) {
+      const srtIngred = `strIngredient${index}`;
+      const strMeasur = `strMeasure${index}`;
+      const IngredAndMeasur = `${meal[srtIngred]} - ${meal[strMeasur]}`;
+      ingredients = [...ingredients, IngredAndMeasur];
+    }
+    const finalRecipe = ingredients.filter((ingredient) => (
+      ingredient !== ' -  '
+      && ingredient !== ' - '
+      && ingredient !== 'null - null'
+      && ingredient !== 'undefined - undefined'
+    ));
+    return finalRecipe;
+  }
+
+  const ingredients = getIngredientsAndMeasures();
+
+  function favoriteClick() {
+    if (isFavorite) {
+      setIsFavorite(false);
+    } else {
+      setIsFavorite(true);
+    }
+  }
+
   return (
     <div>
       <img
@@ -25,16 +57,37 @@ function DetalhesComidas({ history }) {
         width="200px"
       />
       <h3 data-testid="recipe-title">{ meal.strMeal }</h3>
-      <button type="button" data-testid="share-btn">Compartilhar</button>
-      <button type="button" data-testid="favorite-btn">Favoritar</button>
+      <button type="button" data-testid="share-btn">
+        <img src={ shareIcon } alt="share" />
+      </button>
+      <button
+        type="button"
+        data-testid="favorite-btn"
+        onClick={ () => favoriteClick() }
+      >
+        {
+          !isFavorite ? (<img src={ whiteHeartIcon } alt="Favorite" />)
+            : (<img src={ blackHeartIcon } alt="Non favorite" />)
+        }
+      </button>
+      <br />
       <span data-testid="recipe-category">{ meal.strCategory }</span>
+      <br />
       <span data-testid="0-ingredient-name-and-measure">
-        Ingredientes
+        Ingredientes:
         <ul>
-          { }
+          { ingredients
+            .map((ingredient, index) => (
+              <li
+                key={ index }
+                data-testid={ `${index}-ingredient-name-and-measure` }
+              >
+                {ingredient}
+              </li>))}
         </ul>
       </span>
       <span data-testid="instructions">{ meal.strInstructions }</span>
+      <br />
       <video data-testid="video" src={ meal.srtYoutube } controls width="400">
         <track kind="captions" />
         Seu navegador não suporta o elemento
