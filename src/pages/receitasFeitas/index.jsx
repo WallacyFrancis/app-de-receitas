@@ -1,28 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from '../../components/Header';
 import RecipeCard from '../../components/RecipeCard';
 // REQUISITOS 54, 55, 56 e 59
 function ReceitasFeitas() {
-  const [doneRecipes, setDoneRecipes] = useState([]);
-  const [filterDoneRecipes, setFilterDoneRecipes] = useState('');
-
-  localStorage.setItem('doneRecipes', JSON.stringify([]));
-
-  function getDoneRecipesByLocalStorage() {
-    return JSON.parse(localStorage.getItem('doneRecipes'));
-  }
-
-  useEffect(() => {
-    setDoneRecipes(getDoneRecipesByLocalStorage());
-  }, []);
-
-  function getFilterDoneRecipes(recipes) {
-    return (
-      recipes
-        .filter((recipe) => (
-          filterDoneRecipes !== '' ? recipe.type === filterDoneRecipes : recipe))
-    );
-  }
+  const [filter, setFilter] = useState('All');
+  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
 
   return (
     <section>
@@ -31,35 +13,36 @@ function ReceitasFeitas() {
         <button
           type="button"
           data-testid="filter-by-all-btn"
-          onClick={ () => setFilterDoneRecipes('') }
-          value="all"
+          onClick={ ({ target }) => setFilter(target.innerHTML) }
         >
           All
         </button>
         <button
           type="button"
           data-testid="filter-by-food-btn"
-          onClick={ () => setFilterDoneRecipes('comida') }
-          value="comida"
+          onClick={ ({ target }) => setFilter(target.innerHTML) }
         >
           Food
         </button>
         <button
           type="button"
           data-testid="filter-by-drink-btn"
-          onClick={ () => setFilterDoneRecipes('bebida') }
-          value="bebida"
+          onClick={ ({ target }) => setFilter(target.innerHTML) }
         >
           Drinks
         </button>
       </div>
       <div>
-        { doneRecipes !== 0
-          && getFilterDoneRecipes(doneRecipes)
-            .map(
-              (recipe, index) => (
-                <RecipeCard key={ index } recipe={ recipe } index={ index } />),
-            )}
+        {doneRecipes
+          .filter(({ type }) => {
+            if (filter === 'All') return true;
+            if (filter === 'Food' && type === 'comida') return true;
+            return (filter === 'Drinks' && type === 'bebida');
+          })
+          .map(
+            (recipe, index) => (
+              <RecipeCard key={ index } recipe={ recipe } index={ index } />),
+          )}
       </div>
     </section>
   );

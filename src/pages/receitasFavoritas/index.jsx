@@ -1,73 +1,73 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Header from '../../components/Header';
-import shareIcon from '../../images/shareIcon.svg';
-import blackHeartIcon from '../../images/blackHeartIcon.svg';
+// import shareIcon from '../../images/shareIcon.svg';
+// import blackHeartIcon from '../../images/blackHeartIcon.svg';
 
 function ReceitasFavoritas() {
-  const [favorite, setFavorite] = useState([]);
-  const [btnFilter, setBtnFilter] = useState('all');
-  const [recipes, setRecipes] = useState([]);
+  // const [favorite, setFavorite] = useState([]);
+  // const [btnFilter, setBtnFilter] = useState('all');
+  // const [recipes, setRecipes] = useState([]);
 
-  useEffect(() => {
-    function requestFavorites() {
-      const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-      if (favoriteRecipes.length > 0) {
-        setFavorite(favoriteRecipes);
-      }
-    }
-    requestFavorites();
-  }, []);
+  // useEffect(() => {
+  //   function requestFavorites() {
+  //     const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+  //     if (favoriteRecipes.length > 0) {
+  //       setFavorite(favoriteRecipes);
+  //     }
+  //   }
+  //   requestFavorites();
+  // }, []);
 
-  console.log(favorite);
+  // console.log(favorite);
 
-  function renderRecipes() {
-    return (
-      favorite.map((recipe, index) => (
-        <div key={ index }>
-          <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
-          <img
-            src={ recipe.image }
-            alt={ recipe.name }
-            width="200px"
-            data-testid={ `${index}-horizontal-image` }
-          />
-          <br />
-          <button
-            type="button"
-            data-testid={ `${index}-horizontal-share-btn` }
-          >
-            <img src={ shareIcon } alt={ `Share ${recipe.name}` } />
-          </button>
-          <button
-            type="button"
-            data-testid={ `${index}-horizontal-favorite-btn` }
-          >
-            <img src={ blackHeartIcon } alt={ `Non-favorite ${recipe.name}` } />
-          </button>
-        </div>
-      ))
-    );
-  }
+  // function renderRecipes() {
+  //   return (
+  //     favorite.map((recipe, index) => (
+  //       <div key={ index }>
+  //         <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
+  //         <img
+  //           src={ recipe.image }
+  //           alt={ recipe.name }
+  //           width="200px"
+  //           data-testid={ `${index}-horizontal-image` }
+  //         />
+  //         <br />
+  //         <button
+  //           type="button"
+  //           data-testid={ `${index}-horizontal-share-btn` }
+  //         >
+  //           <img src={ shareIcon } alt={ `Share ${recipe.name}` } />
+  //         </button>
+  //         <button
+  //           type="button"
+  //           data-testid={ `${index}-horizontal-favorite-btn` }
+  //         >
+  //           <img src={ blackHeartIcon } alt={ `Non-favorite ${recipe.name}` } />
+  //         </button>
+  //       </div>
+  //     ))
+  //   );
+  // }
 
-  console.log(recipes);
+  // console.log(recipes);
 
-  function handleClick({ target }) {
-    setBtnFilter(target.value);
-    if (btnFilter === 'all') {
-      setRecipes(favorite);
-      console.log(recipes);
-    }
-    if (btnFilter === 'food') {
-      const recipesFood = favorite.filter((recipe) => recipe.type === 'meal');
-      setRecipes(recipesFood);
-    }
-  }
-  console.log(recipes);
+  // function handleClick({ target }) {
+  //   setBtnFilter(target.value);
+  //   if (btnFilter === 'all') {
+  //     setRecipes(favorite);
+  //     console.log(recipes);
+  //   }
+  //   if (btnFilter === 'food') {
+  //     const recipesFood = favorite.filter((recipe) => recipe.type === 'meal');
+  //     setRecipes(recipesFood);
+  //   }
+  // }
+  // console.log(recipes);
 
   return (
     <div>
       <Header title="Receitas Favoritas" />
-      <button
+      {/* <button
         type="button"
         value="all"
         onClick={ (e) => handleClick(e) }
@@ -88,7 +88,7 @@ function ReceitasFavoritas() {
       >
         Drink
       </button>
-      { renderRecipes() }
+      { renderRecipes() } */}
     </div>
   );
 }
