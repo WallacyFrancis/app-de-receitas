@@ -1,4 +1,4 @@
-const saveLocalStorage = (object) => {
+export const saveLocalStorage = (object) => {
   const atualStorage = [];
   const keyLocalStorage = JSON.parse(localStorage.getItem('favoriteRecipes'));
   if (keyLocalStorage === null || keyLocalStorage === undefined) {
@@ -12,4 +12,9 @@ const saveLocalStorage = (object) => {
   }
 };
 
-export default saveLocalStorage;
+export function removeLocalStorage(item) {
+  console.log(item.id);
+  const keyLocalStorage = JSON.parse(localStorage.getItem('favoriteRecipes'));
+  const arrRemoved = keyLocalStorage.filter((recipe) => recipe.id !== item.id);
+  localStorage.setItem('favoriteRecipes', JSON.stringify(arrRemoved));
+}

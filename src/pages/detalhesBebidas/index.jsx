@@ -5,7 +5,7 @@ import RecomendationMealsCard from '../../components/RecomendationMealCard';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 import shareIcon from '../../images/shareIcon.svg';
-import saveLocalStorage from '../../services/localStorageServices';
+import { saveLocalStorage } from '../../services/localStorageServices';
 
 const copy = require('clipboard-copy');
 

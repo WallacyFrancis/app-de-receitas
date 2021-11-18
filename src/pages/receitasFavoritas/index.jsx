@@ -1,8 +1,9 @@
-/* eslint-disable indent */
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import shareIcon from '../../images/shareIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import { removeLocalStorage } from '../../services/localStorageServices';
 
 function ReceitasFavoritas() {
   const [favorite, setFavorite] = useState([]);
@@ -31,7 +32,16 @@ function ReceitasFavoritas() {
       const recipesDrink = recipes.filter((recipe) => recipe.type === 'drink');
       setFavorite(recipesDrink);
     }
-  }, [btnFilter]);
+  }, [recipes, btnFilter]);
+
+  function route(item) {
+    if (item.type === 'meal') {
+      return `/comidas/${item.id}`;
+    }
+    if (item.type === 'drink') {
+      return `/bebidas/${item.id}`;
+    }
+  }
 
   function renderRecipes() {
     const arrFavorites = [];
@@ -44,23 +54,25 @@ function ReceitasFavoritas() {
     return (
       arrFavorites.map((recipe, index) => (
         <div key={ index }>
-          <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
-          { recipe.area !== ''
-          && (<p data-testid={ `${index}-horizontal-top-text` }>{recipe.area}</p>) }
-          { recipe.alcoholicOrNot !== ''
-            && (
-              <p
-                data-testid={ `${index}-horizontal-top-text` }
-              >
-                {recipe.alcoholicOrNot}
-              </p>
-            ) }
-          <img
-            src={ recipe.image }
-            alt={ recipe.name }
-            width="200px"
-            data-testid={ `${index}-horizontal-image` }
-          />
+          <Link to={ route(recipe) }>
+            <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
+            { recipe.area !== ''
+            && (<p data-testid={ `${index}-horizontal-top-text` }>{recipe.area}</p>) }
+            { recipe.alcoholicOrNot !== ''
+              && (
+                <p
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  {recipe.alcoholicOrNot}
+                </p>
+              ) }
+            <img
+              src={ recipe.image }
+              alt={ recipe.name }
+              width="200px"
+              data-testid={ `${index}-horizontal-image` }
+            />
+          </Link>
           <br />
           <button
             type="button"
@@ -71,6 +83,7 @@ function ReceitasFavoritas() {
           <button
             type="button"
             data-testid={ `${index}-horizontal-favorite-btn` }
+            onClick={ () => removeLocalStorage(recipe) }
           >
             <img src={ blackHeartIcon } alt={ `Non-favorite ${recipe.name}` } />
           </button>
