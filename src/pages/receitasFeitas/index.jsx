@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Header from '../../components/Header';
-import RecipeCard from '../../components/RecipeCard';
-// REQUISITOS 54, 55, 56 e 59
-function ReceitasFeitas() {
-  const [filter, setFilter] = useState('All');
-  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+import shareIcon from '../../images/shareIcon.svg';
+
+// REQUISITOS 54 ao 59
+function ReceitasFeitas({ history }) {
+  const [doneRecipes, setDoneRecipes] = useState([]);
+  const [message, setMessage] = useState(false);
+  const [food, setFood] = useState(false);
+  const [drink, setDrink] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem('doneRecipes')) {
+      setDoneRecipes(JSON.parse(localStorage.getItem('doneRecipes')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+  }, [doneRecipes]);
 
   return (
     <section>
@@ -13,39 +27,141 @@ function ReceitasFeitas() {
         <button
           type="button"
           data-testid="filter-by-all-btn"
-          onClick={ ({ target }) => setFilter(target.innerHTML) }
+          onClick={ () => { setFood(false); setDrink(false); } }
         >
           All
         </button>
         <button
           type="button"
           data-testid="filter-by-food-btn"
-          onClick={ ({ target }) => setFilter(target.innerHTML) }
+          onClick={ () => { setFood(true); setDrink(false); } }
         >
-          Food
+          Foods
         </button>
         <button
           type="button"
           data-testid="filter-by-drink-btn"
-          onClick={ ({ target }) => setFilter(target.innerHTML) }
+          onClick={ () => { setFood(false); setDrink(true); } }
         >
           Drinks
         </button>
       </div>
-      <div>
-        {doneRecipes
-          .filter(({ type }) => {
-            if (filter === 'All') return true;
-            if (filter === 'Food' && type === 'comida') return true;
-            return (filter === 'Drinks' && type === 'bebida');
+      <main>
+        {
+          doneRecipes.filter(({ type }) => {
+            if (food === true) return type === 'comida';
+            if (drink === true) return type === 'bebida';
+            return doneRecipes;
+          }).map((item, index) => {
+            if (item.type === 'comida') {
+              return (
+                <div key={ item.id }>
+                  <img
+                    src={ item.image }
+                    alt={ item.name }
+                    data-testid={ `${index}-horizontal-image` }
+                    role="presentation"
+                    onClick={ () => history.push(`/comidas/${item.id}`) }
+                    width="75%"
+                  />
+                  <p
+                    data-testid={ `${index}-horizontal-top-text` }
+                  >
+                    { `${item.area} - ${item.category}` }
+                  </p>
+                  <p
+                    data-testid={ `${index}-horizontal-name` }
+                    role="presentation"
+                    onClick={ () => history.push(`/comidas/${item.id}`) }
+                  >
+                    { item.name }
+                  </p>
+                  <p>
+                    { 'Feita em: ' }
+                    <span data-testid={ `${index}-horizontal-done-date` }>
+                      { item.doneDate }
+                    </span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={ () => {
+                      navigator.clipboard.writeText(`http://localhost:3000/comidas/${item.id}`);
+                      setMessage(true);
+                    } }
+                  >
+                    <img
+                      src={ shareIcon }
+                      alt="Share Icon"
+                      data-testid={ `${index}-horizontal-share-btn` }
+                    />
+                  </button>
+                  { message && <p>Link copiado!</p>}
+                  { item.type === 'comida' && (
+                    <div>
+                      {item.tags.map((tag) => (
+                        <span
+                          key={ tag }
+                          data-testid={ `${index}-${tag}-horizontal-tag` }
+                        >
+                          { tag }
+                        </span>
+                      ))}
+                    </div>) }
+                </div>
+              );
+            } return (
+              <div key={ item.id }>
+                <img
+                  src={ item.image }
+                  alt={ item.name }
+                  data-testid={ `${index}-horizontal-image` }
+                  role="presentation"
+                  onClick={ () => history.push(`/bebidas/${item.id}`) }
+                  width="75%"
+                />
+                <p
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  {item.alcoholicOrNot}
+                </p>
+                <p
+                  data-testid={ `${index}-horizontal-name` }
+                  role="presentation"
+                  onClick={ () => history.push(`/bebidas/${item.id}`) }
+                >
+                  { item.name }
+                </p>
+                <p>
+                  { 'Feita em: ' }
+                  <span data-testid={ `${index}-horizontal-done-date` }>
+                    { item.doneDate }
+                  </span>
+                </p>
+                <button
+                  type="button"
+                  onClick={ () => {
+                    navigator.clipboard.writeText(`http://localhost:3000/comidas/${item.id}`);
+                  } }
+                >
+                  <img
+                    src={ shareIcon }
+                    alt="Share Icon"
+                    data-testid={ `${index}-horizontal-share-btn` }
+                  />
+                </button>
+              </div>
+            );
           })
-          .map(
-            (recipe, index) => (
-              <RecipeCard key={ index } recipe={ recipe } index={ index } />),
-          )}
-      </div>
+        }
+      </main>
     </section>
   );
 }
+
+ReceitasFeitas.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 export default ReceitasFeitas;
