@@ -14,13 +14,9 @@ function ReceitasFavoritas() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    function requestFavorites() {
-      const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-      if (favoriteRecipes.length > 0) {
-        setRecipes(favoriteRecipes);
-      }
+    if (localStorage.getItem('favoriteRecipes')) {
+      setRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')));
     }
-    requestFavorites();
   }, []);
 
   useEffect(() => {
@@ -66,11 +62,9 @@ function ReceitasFavoritas() {
     }
 
     function removeItem(element) {
-      // console.log(element.name);
-      // const filterRemove = arrFavorites.filter((recipe) => recipe.id !== element.id);
       const father = document.getElementById('recipe-favorite');
       const childElement = document.getElementById(element.name);
-      // console.log(childElement);
+
       father.removeChild(childElement);
       removeLocalStorage(element);
     }

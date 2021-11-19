@@ -14,7 +14,7 @@ function Perfil({ history }) {
   return (
     <>
       <Header title="Perfil" />
-      <h3 data-testid="profile-email">{ getEmail() }</h3>
+      <h1 data-testid="profile-email">{ getEmail() }</h1>
       <button
         data-testid="profile-done-btn"
         type="button"
