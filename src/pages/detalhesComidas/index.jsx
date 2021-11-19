@@ -51,7 +51,7 @@ function DetalhesComidas({ history }) {
       setIsFavorite(true);
       const objMeal = {
         id: meal.idMeal,
-        type: 'meal',
+        type: 'comida',
         area: meal.strArea,
         category: meal.strCategory,
         alcoholicOrNot: '',

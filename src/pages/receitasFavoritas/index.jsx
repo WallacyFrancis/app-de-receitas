@@ -5,10 +5,13 @@ import shareIcon from '../../images/shareIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 import { removeLocalStorage } from '../../services/localStorageServices';
 
+const copy = require('clipboard-copy');
+
 function ReceitasFavoritas() {
   const [favorite, setFavorite] = useState([]);
   const [btnFilter, setBtnFilter] = useState('all');
   const [recipes, setRecipes] = useState([]);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     function requestFavorites() {
@@ -25,45 +28,74 @@ function ReceitasFavoritas() {
       setFavorite([]);
     }
     if (btnFilter === 'food') {
-      const recipesFood = recipes.filter((recipe) => recipe.type === 'meal');
+      const recipesFood = recipes.filter((recipe) => recipe.type === 'comida');
       setFavorite(recipesFood);
     }
     if (btnFilter === 'drink') {
-      const recipesDrink = recipes.filter((recipe) => recipe.type === 'drink');
+      const recipesDrink = recipes.filter((recipe) => recipe.type === 'bebida');
       setFavorite(recipesDrink);
     }
   }, [recipes, btnFilter]);
 
+  function handleShare(item) {
+    setMessage('Link copiado!');
+    if (item.type === 'comida') {
+      return copy(`http://localhost:3000/comidas/${item.id}`);
+    }
+    if (item.type === 'bebida') {
+      return copy(`http://localhost:3000/bebidas/${item.id}`);
+    }
+  }
+
   function route(item) {
-    if (item.type === 'meal') {
+    if (item.type === 'comida') {
       return `/comidas/${item.id}`;
     }
-    if (item.type === 'drink') {
+    if (item.type === 'bebida') {
       return `/bebidas/${item.id}`;
     }
   }
 
   function renderRecipes() {
     const arrFavorites = [];
+
     if (favorite.length === 0) {
       arrFavorites.push(...recipes);
     } else {
       arrFavorites.push(...favorite);
     }
-    console.log(arrFavorites);
+
+    function removeItem(element) {
+      // console.log(element.name);
+      // const filterRemove = arrFavorites.filter((recipe) => recipe.id !== element.id);
+      const father = document.getElementById('recipe-favorite');
+      const childElement = document.getElementById(element.name);
+      // console.log(childElement);
+      father.removeChild(childElement);
+      removeLocalStorage(element);
+    }
+
     return (
       arrFavorites.map((recipe, index) => (
-        <div key={ index }>
+        <div key={ index } id={ `${recipe.name}` }>
           <Link to={ route(recipe) }>
-            <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
+            <h3 data-testid={ `${index}-horizontal-name` }>
+              { recipe.name }
+            </h3>
             { recipe.area !== ''
-            && (<p data-testid={ `${index}-horizontal-top-text` }>{recipe.area}</p>) }
+            && (
+              <p
+                data-testid={ `${index}-horizontal-top-text` }
+              >
+                { `${recipe.area} - ${recipe.category}` }
+              </p>
+            ) }
             { recipe.alcoholicOrNot !== ''
               && (
                 <p
                   data-testid={ `${index}-horizontal-top-text` }
                 >
-                  {recipe.alcoholicOrNot}
+                  { `${recipe.alcoholicOrNot} - ${recipe.category}` }
                 </p>
               ) }
             <img
@@ -77,13 +109,17 @@ function ReceitasFavoritas() {
           <button
             type="button"
             data-testid={ `${index}-horizontal-share-btn` }
+            src="shareIcon"
+            onClick={ () => handleShare(recipe) }
           >
             <img src={ shareIcon } alt={ `Share ${recipe.name}` } />
           </button>
+          { message }
           <button
             type="button"
             data-testid={ `${index}-horizontal-favorite-btn` }
-            onClick={ () => removeLocalStorage(recipe) }
+            onClick={ () => removeItem(recipe) }
+            src="blackHeartIcon"
           >
             <img src={ blackHeartIcon } alt={ `Non-favorite ${recipe.name}` } />
           </button>
@@ -97,7 +133,7 @@ function ReceitasFavoritas() {
   }
 
   return (
-    <div>
+    <div id="recipe-favorite">
       <Header title="Receitas Favoritas" />
       <button
         type="button"
