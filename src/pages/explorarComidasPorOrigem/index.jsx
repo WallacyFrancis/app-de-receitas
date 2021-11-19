@@ -8,53 +8,45 @@ import { fetchRecipes } from '../../services/fetchAPI';
 function ExplorarComidasPorOrigem() {
   const [originFoods, setOriginFoods] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState('American');
-  const [noFilter, setNoFilter] = useState('All');
   const { recipes, setRecipes } = useContext(Context);
   const MAX_CARDS = 12;
+
+  async function renderNoFiltersMeals() {
+    const result = await fetchRecipes('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+    setRecipes(result.meals);
+  }
 
   useEffect(() => {
     async function fetchAPIOrigin() {
       const getArea = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?a=list');
       const resultArea = await getArea.json();
-      let foodsByOrigin = resultArea.meals;
-
-      if (foodsByOrigin.length > MAX_CARDS) {
-        foodsByOrigin = foodsByOrigin.splice(0, MAX_CARDS);
-      }
+      const foodsByOrigin = resultArea.meals;
       setOriginFoods(foodsByOrigin);
     }
     fetchAPIOrigin();
-  }, [setRecipes]);
+  }, []);
 
   useEffect(() => {
+    if (selectedFilter === 'All') {
+      renderNoFiltersMeals();
+    }
+
     async function renderFilter() {
       const filter = await fetchRecipes(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${selectedFilter}`);
       setRecipes(filter.meals);
     }
-    renderFilter();
-  }, [selectedFilter, setRecipes]);
 
-  useEffect(() => {
-    async function renderAll() {
-      const noFilters = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-      const responseNoFilters = await noFilters.json();
-      setNoFilter(responseNoFilters);
+    if (selectedFilter !== 'All') {
+      renderFilter();
     }
-    renderAll();
-  }, [setNoFilter]);
+  }, [selectedFilter]);
 
   function handleChange({ target: { value } }) {
     setSelectedFilter(value);
-    if (value === 'All') {
-      // renderAll();
-      console.log(noFilter);
-    }
   }
-
   return (
     <>
       <Header title="Explorar Origem" />
-
       <select
         name="area"
         data-testid="explore-by-area-dropdown"
@@ -72,9 +64,9 @@ function ExplorarComidasPorOrigem() {
         )) }
       </select>
 
-      { recipes.map((recipe, index) => (
-        <Link key={ index } to={ `/comidas/${recipe.strArea}` }>
-          <div data-testid={ `${index}-ingredient-card` }>
+      { recipes.slice(0, MAX_CARDS).map((recipe, index) => (
+        <Link key={ index } to={ `/comidas/${recipe.idMeal}` }>
+          <div data-testid={ `${index}-recipe-card` }>
             <img
               src={ recipe.strMealThumb }
               alt={ recipe.strMeat }

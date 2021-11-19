@@ -16,6 +16,7 @@ import ExplorarComidasPorOrigem from '../pages/explorarComidasPorOrigem';
 import Perfil from '../pages/perfil';
 import ReceitasFeitas from '../pages/receitasFeitas';
 import ReceitasFavoritas from '../pages/receitasFavoritas';
+import NotFound from '../pages/notFound';
 
 function Rotas() {
   return (
@@ -52,6 +53,7 @@ function Rotas() {
       <Route exact path="/perfil" component={ Perfil } />
       <Route exact path="/receitas-feitas" component={ ReceitasFeitas } />
       <Route exact path="/receitas-favoritas" component={ ReceitasFavoritas } />
+      <Route exact path="/explorar/bebidas/area" component={ NotFound } />
     </Switch>
   );
 }
