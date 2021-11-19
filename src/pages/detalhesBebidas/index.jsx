@@ -51,7 +51,7 @@ function DetalhesBebidas({ history }) {
       setIsFavorite(true);
       const objDrink = {
         id: drink.idDrink,
-        type: 'drink',
+        type: 'bebida',
         area: '',
         category: drink.strCategory,
         alcoholicOrNot: drink.strAlcoholic,

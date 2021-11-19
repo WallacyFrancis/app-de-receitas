@@ -38,19 +38,19 @@ describe('Favorite recipes screen', () => {
 
   describe('60 - Implemente os elementos da tela de receitas favoritas (cumulativo com os atributos em comum com a tela de receitas feitas) respeitando os atributos descritos no protótipo', () => {
     it('Todos os data-testids, cumulativo com os atributos em comum com a tela de receitas feitas, estão disponíveis', () => {
-      cy.get('[data-testid="filter-by-all-btn"]');// ok
-      cy.get('[data-testid="filter-by-food-btn"]');// ok
-      cy.get('[data-testid="filter-by-drink-btn"]');// ok
-      cy.get('[data-testid="0-horizontal-image"]');// ok
-      cy.get('[data-testid="0-horizontal-top-text"]');// ok
-      cy.get('[data-testid="0-horizontal-name"]');// ok
-      cy.get('[data-testid="0-horizontal-share-btn"]');// ok
-      cy.get('[data-testid="0-horizontal-favorite-btn"]');// ok
-      cy.get('[data-testid="1-horizontal-image"]');// ok
-      cy.get('[data-testid="1-horizontal-top-text"]');// ok
-      cy.get('[data-testid="1-horizontal-name"]'); // ok
-      cy.get('[data-testid="1-horizontal-share-btn"]');// ok
-      cy.get('[data-testid="1-horizontal-favorite-btn"]');// ok
+      cy.get('[data-testid="filter-by-all-btn"]');
+      cy.get('[data-testid="filter-by-food-btn"]');
+      cy.get('[data-testid="filter-by-drink-btn"]');
+      cy.get('[data-testid="0-horizontal-image"]');
+      cy.get('[data-testid="0-horizontal-top-text"]');
+      cy.get('[data-testid="0-horizontal-name"]');
+      cy.get('[data-testid="0-horizontal-share-btn"]');
+      cy.get('[data-testid="0-horizontal-favorite-btn"]');
+      cy.get('[data-testid="1-horizontal-image"]');
+      cy.get('[data-testid="1-horizontal-top-text"]');
+      cy.get('[data-testid="1-horizontal-name"]'); 
+      cy.get('[data-testid="1-horizontal-share-btn"]');
+      cy.get('[data-testid="1-horizontal-favorite-btn"]');
     });
   });
 
